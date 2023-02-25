@@ -1,16 +1,59 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import pygame as pg
+import sys
+from ctypes import *
 
 
-# Press the green button in the gutter to run the script.
+pg.init()
+FPS = 60
+WIDTH = windll.user32.GetSystemMetrics(0)
+HEIGHT = windll.user32.GetSystemMetrics(1)
+KOEF = WIDTH / 1920
+if WIDTH <= 1920:
+    WIDTH = 1920
+    HEIGHT = 1080
+    KOEF = 1
+
+
+def terminate():
+    pg.quit()
+    sys.exit()
+
+
+class Field():
+    def __init__(self, screen, x, y, n, m):
+        self.field = [[' ' for i in range(n)] for j in range(m)]
+        self.x, self.y = x, y
+        self.screen = screen
+
+    def draw(self):
+        pass
+
+
+class Game():
+    def __init__(self):
+        self.screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        self.clock = pg.time.Clock()
+        self.all_sprites = pg.sprite.Group()
+
+        self.running = True
+
+    def run(self):
+        while self.running:
+            self.screen.fill('darkcyan')
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    terminate()
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        terminate()
+            self.all_sprites.draw(self.screen)
+            self.all_sprites.update()
+
+            pg.display.flip()
+            self.clock.tick(FPS)
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    ex = Game()
+    ex.run()
